@@ -1,0 +1,11 @@
+{
+  "name": "hexo-kotlin-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kairlec",
+  "license": "MIT"
+}
