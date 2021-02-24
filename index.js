@@ -37,12 +37,13 @@ initPreConfig()
 function getConfig (sourceCode) {
   const config = Object.assign({}, codeBlockPreConfig)
   const singalConfig = new Set(codeBlockPreSingalConfig)
-  let enable = false
+  let enable = preConfig.enable
   // 获取第一行注释
   const firstLineIndex = sourceCode.indexOf('\n')
   const firstLine = sourceCode.slice(0, firstLineIndex)
   const comment = /^\s*\/{2,} *(.*)$/m.exec(firstLine)
   if (comment !== null && comment[1].length > 0) {
+    sourceCode = sourceCode.slice(firstLineIndex + 1)
     comment[1].toLowerCase().split(/\s+/).forEach((item) => {
       const result = /^([^=]+)=(.*)$/.exec(item)
       if (result) {
@@ -59,20 +60,21 @@ function getConfig (sourceCode) {
         }
       }
     })
-    if (preConfig.enable || enable) {
-      const lt = Array.from(singalConfig)
-      for (const c in config) {
-        lt.push(`${c}="${config[c]}"`)
-      }
-      return {
-        attributes: lt.join(' '),
-        code: sourceCode.slice(firstLineIndex + 1),
-        ok: true
-      }
-    }
   }
-  return {
-    ok: false
+  if (enable) {
+    const lt = Array.from(singalConfig)
+    for (const c in config) {
+      lt.push(`${c}="${config[c]}"`)
+    }
+    return {
+      attributes: lt.join(' '),
+      code: sourceCode,
+      ok: true
+    }
+  } else {
+    return {
+      ok: false
+    }
   }
 }
 
