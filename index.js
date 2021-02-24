@@ -18,11 +18,11 @@ function initPreConfig () {
   preConfig.enable = kotlinPlaygroundConfig.enable_all !== false
   preConfig.otherHighlight = kotlinPlaygroundConfig.other_highlight
   preConfig.otherHighlightConfig = kotlinPlaygroundConfig.other_highlight_config || {}
+  preConfig.css = kotlinPlaygroundConfig.css || {}
+  preConfig.tab = kotlinPlaygroundConfig.tab || 4
   if (kotlinPlaygroundConfig.custom_pre) {
     Object.assign(preConfig, kotlinPlaygroundConfig.custom_pre)
   }
-  codeBlockPreConfig.css = kotlinPlaygroundConfig.css || {}
-  codeBlockPreConfig.tab = kotlinPlaygroundConfig.tab || 4
   codeBlockPreConfig.lines = kotlinPlaygroundConfig.line_numbers !== false
   codeBlockPreConfig['auto-indent'] = kotlinPlaygroundConfig.auto_indent !== false
   codeBlockPreConfig.indent = kotlinPlaygroundConfig.indent || 4
@@ -100,11 +100,11 @@ hexo.extend.injector.register('head_end', (function () {
   // 统一highlight.js,playground,prismjs的样式
   return `<style type="text/css">
     .CodeMirror-lines,.line,.code-output {
-        font-size: ${codeBlockPreConfig.css.font_size || '16px'};
-        line-height: ${codeBlockPreConfig.css.line_height || '22px'};
+        font-size: ${preConfig.css.font_size || '16px'};
+        line-height: ${preConfig.css.line_height || '22px'};
     }
     </style>`
-})(), 'post')
+})(), 'default')
 
 hexo.extend.injector.register('body_end', (function () {
   const kotlinPlaygroundConfig = hexo.config.kotlin_playground || {}
@@ -113,17 +113,20 @@ hexo.extend.injector.register('body_end', (function () {
   const dataServer = kotlinPlaygroundConfig.data_server || null
   const dataVersion = kotlinPlaygroundConfig.data_version || null
   const attbitures = [`src="${src}"`]
-  if (dataSelector) {
-    attbitures.push(`data-selector="${dataSelector}"`)
-  }
   if (dataServer) {
     attbitures.push(`data-server="${dataServer}"`)
   }
   if (dataVersion) {
     attbitures.push(`data-version="${dataVersion}"`)
   }
-  return `<script ${attbitures.join(' ')}"></script>`
-})(), 'post')
+  return `<script ${attbitures.join(' ')}"></script>
+  <script>
+    KotlinPlayground('${dataSelector}')
+    window.addEventListener('pjax:complete', event => {
+        KotlinPlayground('${dataSelector}')
+      });
+  </script>`
+})(), 'default')
 
 const escapeHtml = (str) =>
   str.replace(
@@ -163,7 +166,7 @@ function formatLine (line, useHljs) {
 
 function otherHighLightCode (code, _lang, els) {
   const gutter = codeBlockPreConfig.lines
-  const tab = codeBlockPreConfig.tab
+  const tab = preConfig.tab
   const engine = preConfig.otherHighlight
   const useHljs = preConfig.otherHighlightConfig.hljs
   if (engine === 'highlight' && hljs) {
