@@ -1,12 +1,8 @@
 'use strict'; //eslint-disable-line
-let hljs, prismjs
-try {
-  hljs = require('highlight.js')
-} catch {}
-try {
-  prismjs = require('prismjs')
-} catch {}
+const hljs = require('highlight.js')
+const prismjs = require('prismjs')
 const stripIndent = require('strip-indent')
+
 const codeBlockPreConfig = {}
 const codeBlockPreSingalConfig = []
 const preConfig = {}
@@ -89,7 +85,7 @@ function parse (sourceCode) {
       const suffix = escapeHtml(code.slice(hideEnd.index + hideEnd[0].length))
       return `<div class="highlight-container"></div><pre class="language-kotlin"><${preConfig.htmlTag} class="${preConfig.htmlTagClass}" ${attributes}>${prefix}<textarea class="hidden-dependency">${hiddenCode}</textarea>${suffix}</${preConfig.htmlTag}></pre>`
     } else {
-      return `<div class="highlight-container"></div><pre class="language-kotlin"><${preConfig.htmlTag} class="${preConfig.htmlTagClass}" ${attributes}>${code}</${preConfig.htmlTag}></pre>`
+      return `<div class="highlight-container"></div><pre class="language-kotlin"><${preConfig.htmlTag} class="${preConfig.htmlTagClass}" ${attributes}>${escapeHtml(code)}</${preConfig.htmlTag}></pre>`
     }
   } else {
     return null
@@ -169,10 +165,15 @@ function otherHighLightCode (code, _lang, els) {
   const tab = preConfig.tab
   const engine = preConfig.otherHighlight
   const useHljs = preConfig.otherHighlightConfig.hljs
-  if (engine === 'highlight' && hljs) {
+  if (engine === 'highlight') {
     const firstLine = 1
     hljs.configure({ classPrefix: useHljs ? 'hljs-' : '' })
-    const data = hljs.highlight(_lang, code)
+    let data
+    if (_lang.length === 0) {
+      data = hljs.highlightAuto(code)
+    } else {
+      data = hljs.highlight(_lang, code)
+    }
     const lang = _lang || data.lang || ''
     const classNames = (useHljs ? 'hljs' : 'highlight') + (lang ? ` ${lang}` : '')
 
@@ -198,7 +199,7 @@ function otherHighLightCode (code, _lang, els) {
     result += `<td class="code">${before}${content}${after}</td>`
     result += '</tr></table></figure>'
     return result
-  } else if (engine === 'prismjs' && prismjs) {
+  } else if (engine === 'prismjs') {
 
   } else {
     return els()
