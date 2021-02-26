@@ -1,6 +1,6 @@
-'use strict'; //eslint-disable-line
-const hljs = require('highlight.js')
-const prismjs = require('prismjs')
+// eslint-disable-next-line
+'use strict';
+const { highlight, escapeHTML, prismHighlight } = require('hexo-util')
 const stripIndent = require('strip-indent')
 const fs = require('fs')
 const kotlinPlaygroundConfig = hexo.config.kotlin_playground || {}
@@ -17,7 +17,7 @@ if (!kotlinPlaygroundConfig.disable_plugin) {
     preConfig.otherHighlight = kotlinPlaygroundConfig.other_highlight
     preConfig.otherHighlightConfig = kotlinPlaygroundConfig.other_highlight_config || {}
     preConfig.css = kotlinPlaygroundConfig.css || {}
-    preConfig.tab = kotlinPlaygroundConfig.tab || 4
+    preConfig.tab = kotlinPlaygroundConfig.tab || '    '
     if (kotlinPlaygroundConfig.custom_pre) {
       Object.assign(preConfig, kotlinPlaygroundConfig.custom_pre)
     }
@@ -82,12 +82,12 @@ if (!kotlinPlaygroundConfig.disable_plugin) {
       const hideStart = /[^\n]*^\/{2,}\s*@hidestart[^\n]*$\n?/mg.exec(code)
       const hideEnd = /[^\n]*^\/{2,}\s*@hideend[^\n]*$\n?/mg.exec(code)
       if (hideStart && hideEnd) {
-        const prefix = escapeHtml(code.substr(0, hideStart.index - 1))
-        const hiddenCode = escapeHtml(code.slice(hideStart.index + hideStart[0].length, hideEnd.index - 1))
-        const suffix = escapeHtml(code.slice(hideEnd.index + hideEnd[0].length))
+        const prefix = escapeHTML(code.substr(0, hideStart.index - 1))
+        const hiddenCode = escapeHTML(code.slice(hideStart.index + hideStart[0].length, hideEnd.index - 1))
+        const suffix = escapeHTML(code.slice(hideEnd.index + hideEnd[0].length))
         return `<pre class="language-kotlin"><${preConfig.htmlTag} class="${preConfig.htmlTagClass}" ${attributes}>${prefix}<textarea class="hidden-dependency">${hiddenCode}</textarea>${suffix}</${preConfig.htmlTag}></pre>`
       } else {
-        return `<pre class="language-kotlin"><${preConfig.htmlTag} class="${preConfig.htmlTagClass}" ${attributes}>${escapeHtml(code)}</${preConfig.htmlTag}></pre>`
+        return `<pre class="language-kotlin"><${preConfig.htmlTag} class="${preConfig.htmlTagClass}" ${attributes}>${escapeHTML(code)}</${preConfig.htmlTag}></pre>`
       }
     } else {
       return null
@@ -97,7 +97,7 @@ if (!kotlinPlaygroundConfig.disable_plugin) {
   hexo.extend.injector.register('head_end', (function () {
     // 统一highlight.js,playground,prismjs的样式
     return `<style type="text/css">
-      .CodeMirror-lines,.line,.code-output {
+      .CodeMirror-lines,.line,.code-output,.code,.token {
           font-size: ${preConfig.css.font_size || '16px'};
           line-height: ${preConfig.css.line_height || '22px'};
       }
@@ -131,24 +131,11 @@ if (!kotlinPlaygroundConfig.disable_plugin) {
     </script>`
   })(), 'default')
 
-  const escapeHtml = (str) =>
-    str.replace(
-      /[&<>'"]/g,
-      (tag) =>
-        ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          "'": '&#39;',
-          '"': '&quot;'
-        }[tag] || tag)
-    )
-
   hexo.extend.filter.register('marked:renderer', function (renderer) {
     // 定义 renderer.code 来自定义代码块的解析行为
     renderer.__code = renderer.code
     renderer.code = (sourceCode, language) => {
-      sourceCode = stripIndent(sourceCode)
+      sourceCode = stripIndent(sourceCode).replace(/\t/mg, preConfig.tab)
       if (language.toLowerCase() === 'kotlin') {
         const data = parse(sourceCode)
         if (!data) {
@@ -160,58 +147,16 @@ if (!kotlinPlaygroundConfig.disable_plugin) {
     }
   })
 
-  function replaceTabs (line, tab) {
-    let str = ' '
-    for (let i = 0; i < tab; i++) {
-      str += ' '
-    }
-    return line.replace(/\t/mg, str)
-  }
-  function formatLine (line, useHljs) {
-    return (useHljs ? '' : '<span class="line') + (useHljs ? line : `">${line}</span><br>`)
-  }
-
   function otherHighLightCode (code, _lang, els) {
     const gutter = codeBlockPreConfig.lines
     const tab = preConfig.tab
     const engine = preConfig.otherHighlight
     const useHljs = preConfig.otherHighlightConfig.hljs
+    const otherPreConfig = kotlinPlaygroundConfig.other_pre_config
     if (engine === 'highlight') {
-      const firstLine = 1
-      hljs.configure({ classPrefix: useHljs ? 'hljs-' : '' })
-      let data
-      if (_lang.length === 0) {
-        data = hljs.highlightAuto(code)
-      } else {
-        data = hljs.highlight(_lang, code)
-      }
-      const lang = _lang || data.lang || ''
-      const classNames = (useHljs ? 'hljs' : 'highlight') + (lang ? ` ${lang}` : '')
-
-      const before = useHljs ? `<pre><code class="${classNames}">` : '<pre>'
-      const after = useHljs ? '</code></pre>' : '</pre>'
-
-      const lines = data.value.split('\n')
-      let numbers = ''
-      let content = ''
-
-      for (let i = 0, len = lines.length; i < len; i++) {
-        let line = lines[i]
-        if (tab) line = replaceTabs(line, tab)
-        numbers += `<span class="line">${Number(firstLine) + i}</span><br>`
-        content += formatLine(line, useHljs)
-      }
-
-      let result = `<figure class="highlight${data.language ? ` ${data.language}` : ''}">`
-      result += '<table><tr>'
-      if (gutter) {
-        result += `<td class="gutter"><pre>${numbers}</pre></td>`
-      }
-      result += `<td class="code">${before}${content}${after}</td>`
-      result += '</tr></table></figure>'
-      return result
+      return highlight(code, { hljs: useHljs, gutter: gutter, tab: tab, lang: _lang, ...otherPreConfig })
     } else if (engine === 'prismjs') {
-
+      return prismHighlight(code, { hljs: useHljs, gutter: gutter, tab: tab, lang: _lang, ...otherPreConfig })
     } else {
       return els()
     }

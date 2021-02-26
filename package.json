@@ -9,8 +9,7 @@
   "author": "Kairlec",
   "license": "MIT",
   "dependencies": {
-    "highlight.js": "^10.6.0",
-    "prismjs": "^1.23.0",
+    "hexo-util": "^2.4.0",
     "strip-indent": "^3.0.0"
   }
 }
