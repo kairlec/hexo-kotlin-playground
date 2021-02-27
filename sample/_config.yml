@@ -3,7 +3,7 @@ kotlin_playground:
   # 加载的额外js内容, 
   extend:
     js: "source/_data/kotlin_playground.js"
-  # 是否禁用插件,true的时候才禁用
+  # 是否禁用插件
   disable_plugin: ~
   # 是否默认启用所有的kotlin代码框的playground功能
   enable_all: true
@@ -11,9 +11,9 @@ kotlin_playground:
   src: 'https://unpkg.com/kotlin-playground@1'
   # playground的数据选择器,即为要选择的代码块标记,应当是符合querySelect的内容
   data_selector: '.kotlin-code'
-  # 数据服务器,要请求的服务器地址,默认为~,可在首行配置更改
+  # 数据服务器,要请求的服务器地址,默认为~
   data_server: ~
-  # 要使用的版本,默认为~(最新版),可在首行配置更改
+  # 要使用的版本,默认为~(最新版)
   data_version: ~
   # 要生成的html标签名称
   html_tag: 'code'
@@ -23,20 +23,20 @@ kotlin_playground:
   custom_pre:
   # 自定义的代码块预配置
   custom_cb_pre: 
-  # 是否启用行号,默认为true,可在首行配置更改
+  # 是否启用行号,默认为true
   line_numbers: true
-  # 是否启用自动缩进,默认为true,可在首行配置更改
+  # 是否启用自动缩进,默认为true
   auto_indent: true
-  # 要将tab替换为的内容,默认为长度为4的空格
+  # 要将tab替换为的内容
   tab: '    '
-  # 要缩进的长度,默认为4,可在首行配置更改
+  # 要缩进的长度
   indent: 4
-  # 当前代码块的主题,可在首行配置更改
+  # 当前代码块的主题
   # 支持 idea|darcula|default
   theme: 'default'
   # 若非kotlin语言,则使用的其他的解析引擎,均为hexo-util内的解析方法
   # 支持 highlight|prismjs
-  other_highlight: 'prismjs'
+  other_highlight: 'highlight'
   # 其他的解析引擎的配置
   other_pre_config:
     # 禁用highlight.js的自动语言检测
