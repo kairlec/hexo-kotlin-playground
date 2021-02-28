@@ -1,0 +1,27 @@
+{
+  "name": "hexo-kotlin-playground",
+  "version": "1.0.0",
+  "description": "使Hexo的Code Block支持Kotlin Playground",
+  "main": "index",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kairlec/hexo-kotlin-playground"
+  },
+  "keywords": [
+    "hexo",
+    "kotlin",
+    "playground"
+  ],
+  "author": {
+    "name": "Kairlec",
+    "email": "sunfokairlec@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "hexo-util": "^2.4.0",
+    "strip-indent": "^3.0.0"
+  }
+}
