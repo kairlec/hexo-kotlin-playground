@@ -1,8 +1,8 @@
-# https://github.com/JetBrains/kotlin-playground
+# 部分配置项意义可见https://github.com/JetBrains/kotlin-playground
 kotlin_playground:
   # 加载的额外js内容, 
   extend:
-    js: "source/_data/kotlin_playground.js"
+    # js: "source/_data/kotlin_playground.js"
   # 是否禁用插件
   disable_plugin: ~
   # 是否默认启用所有的kotlin代码框的playground功能

@@ -1,6 +1,7 @@
 const { initPreConfig, isPluginDisabled, rendererFilterFunction, makeBodyEndInjectContent, makeHeadEndInjectContent } = require('./lib/index')
 
 initPreConfig(hexo.config.kotlin_playground || {})
+
 if (!isPluginDisabled()) {
   hexo.extend.injector.register('head_end', makeHeadEndInjectContent(), 'default')
 
