@@ -54,6 +54,11 @@ npm install hexo-kotlin-playground
   val str = "Hello Kotlin"
   //@hideend
   ```
+- 仅显示代码
+  在代码块中插入以`//sampleStart`,以`//sampleEnd`结尾,即可只显示这块代码中间的内容
+  忽略此注释则使用代码块的`none-markers`属性
+  取消显示隐藏代码的按钮则设置代码块的属性`folded-button`为`false`(**`folded-button=false`**)
+  > 这部分和[Kotlin Playground Customizing editors](https://github.com/JetBrains/kotlin-playground#customizing-editors)官方使用方法一样
 
 ### 其他
 - 适配 next的copy-btn  
