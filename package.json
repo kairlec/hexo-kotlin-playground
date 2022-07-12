@@ -1,6 +1,6 @@
 {
   "name": "hexo-kotlin-playground",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "使Hexo的Code Block支持Kotlin Playground",
   "main": "index",
   "scripts": {
@@ -21,7 +21,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "hexo-util": "^2.4.0",
-    "strip-indent": "^3.0.0"
+    "hexo-util": "^2.6.1"
   }
 }

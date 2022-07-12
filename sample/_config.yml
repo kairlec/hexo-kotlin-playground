@@ -5,8 +5,6 @@ kotlin_playground:
     # js: "source/_data/kotlin_playground.js"
   # 是否禁用插件
   disable_plugin: ~
-  # 是否默认启用所有的kotlin代码框的playground功能
-  enable_all: true
   # 要引用的kotlin-playground的源
   src: 'https://unpkg.com/kotlin-playground@1'
   # playground的数据选择器,即为要选择的代码块标记,应当是符合querySelect的内容
@@ -38,7 +36,7 @@ kotlin_playground:
   # 支持 highlight|prismjs
   other_highlight: 'highlight'
   # 其他的解析引擎的配置
-  other_pre_config:
+  other_highlight_config:
     # 禁用highlight.js的自动语言检测
     autoDetect: false
   # css配置,这里是为了统一代码块内样式的
