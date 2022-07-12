@@ -10,7 +10,7 @@ npm install hexo-kotlin-playground --save
 ```
 ##### 启用插件
 
-拷贝样例[_config.yml](https://github.com/kairlec/hexo-kotlin-playground/blob/main/sample/_config.yml)内的内容至你的`_config.yml`
+拷贝样例[_config.yml](https://github.com/kairlec/hexo-kotlin-playground/blob/v2/sample/_config.yml)内的内容至你的`_config.yml`
 
 #### 注意事项
 
@@ -45,9 +45,9 @@ npm install hexo-kotlin-playground --save
   > platform => data-target-platform  
   > readonly => data-highlight-only  
   > ...  
-  > 更多可以看[SpecialConfigKey](https://github.com/kairlec/hexo-kotlin-playground/blob/main/lib/index.js#L7-L24)
+  > 更多可以看[SpecialConfigKey](https://github.com/kairlec/hexo-kotlin-playground/blob/82d3fcede3de651c4986ad1f6ae9ef3574cb7b50/lib/index.js#L6-L30)
 
-  [其他别名](https://github.com/kairlec/hexo-kotlin-playground/blob/main/lib/index.js#L7-L24)
+  [其他别名](https://github.com/kairlec/hexo-kotlin-playground/blob/main/lib/index.js#L6-L30)
 
 - 隐藏代码
   在代码块中插入以`//@hidestart`,以`//@hideend`结尾的,即可隐藏这段代码块中间的内容
